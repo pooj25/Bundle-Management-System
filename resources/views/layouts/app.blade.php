@@ -105,8 +105,11 @@
 
     <div class="flex h-screen w-full overflow-hidden bg-[#f8fafc]">
 
-        <!-- Left Sidebar (Clean White with Micro-interactions) -->
-        <aside class="w-64 bg-white border-r border-slate-200/80 flex flex-col flex-shrink-0 z-20 select-none shadow-[1px_0_10px_rgba(0,0,0,0.02)]">
+        <!-- Mobile Sidebar Backdrop Overlay -->
+        <div id="sidebar-backdrop" onclick="toggleMobileSidebar()" class="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm hidden md:hidden transition-opacity"></div>
+
+        <!-- Left Sidebar (Off-canvas on mobile, fixed on desktop) -->
+        <aside id="main-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200/80 flex flex-col flex-shrink-0 select-none shadow-[1px_0_10px_rgba(0,0,0,0.02)] transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:static md:z-20">
             
             <!-- Brand Logo Header -->
             <div class="h-16 px-5 flex items-center justify-between border-b border-slate-100">
@@ -119,6 +122,9 @@
                         <div class="text-[10px] uppercase font-bold tracking-wider text-slate-400 mt-1">MANUFACTURING</div>
                     </div>
                 </a>
+                <button onclick="toggleMobileSidebar()" class="md:hidden text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
             </div>
 
             <!-- New Production Order Button -->
@@ -179,16 +185,20 @@
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#f8fafc]">
 
             <!-- Top Header Bar -->
-            <header class="h-16 bg-white border-b border-slate-200/80 px-6 flex items-center justify-between flex-shrink-0 z-10 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
+            <header class="h-16 bg-white border-b border-slate-200/80 px-3 sm:px-6 flex items-center justify-between flex-shrink-0 z-10 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
                 
                 <!-- Left Title & Navigation Tabs -->
-                <div class="flex items-center space-x-8">
-                    <h1 class="text-base font-bold text-slate-900 tracking-tight flex items-center space-x-2">
-                        <span>@yield('header_title', 'Bundle Management')</span>
+                <div class="flex items-center space-x-2 sm:space-x-6 min-w-0 overflow-hidden">
+                    <button onclick="toggleMobileSidebar()" class="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg md:hidden flex-shrink-0" title="Toggle Navigation Menu">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+
+                    <h1 class="text-xs sm:text-base font-bold text-slate-900 tracking-tight flex items-center space-x-2 truncate">
+                        <span class="truncate">@yield('header_title', 'Bundle Management')</span>
                     </h1>
 
-                    <!-- Header Navigation Tabs with Smooth Line Indicator -->
-                    <div class="flex space-x-6 text-xs font-semibold">
+                    <!-- Header Navigation Tabs with Horizontal Touch Scroll -->
+                    <div class="flex space-x-3 sm:space-x-6 text-xs font-semibold overflow-x-auto whitespace-nowrap py-4 max-w-full">
                         <a href="{{ route('dashboard') }}" class="py-5 px-1 border-b-2 transition duration-150 {{ request()->routeIs('dashboard') ? 'border-blue-600 text-blue-600 font-bold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300' }}">
                             Dashboard
                         </a>
@@ -205,9 +215,9 @@
                 </div>
 
                 <!-- Right Header Tools -->
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
                     <!-- Search Input with Glow Focus -->
-                    <div class="relative w-64 hidden md:block">
+                    <div class="relative w-40 lg:w-64 hidden lg:block">
                         <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 transform -translate-y-1/2"></i>
                         <input type="text" placeholder="Search bundles, orders..." class="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white text-slate-700 placeholder-slate-400 transition" onkeyup="if(event.key==='Enter') window.location.href='{{ route('bundles.index') }}?search='+encodeURIComponent(this.value)">
                     </div>
@@ -224,18 +234,18 @@
                     </button>
 
                     <!-- User Profile & Logout Section -->
-                    <div class="flex items-center space-x-3 pl-3 border-l border-slate-200">
+                    <div class="flex items-center space-x-2 sm:space-x-3 pl-2 sm:pl-3 border-l border-slate-200">
                         
                         <!-- User Card -->
-                        <div class="flex items-center space-x-2.5">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-900 to-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-white">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-900 to-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-white flex-shrink-0">
                                 {{ strtoupper(substr(auth()->user()->name ?? 'JM', 0, 2)) }}
                             </div>
-                            <div class="hidden sm:block text-left leading-tight">
-                                <div class="text-xs font-bold text-slate-900">
+                            <div class="hidden xl:block text-left leading-tight">
+                                <div class="text-xs font-bold text-slate-900 truncate">
                                     {{ auth()->user()->name ?? 'John Miller' }}
                                 </div>
-                                <div class="text-[10px] text-slate-400 font-medium">
+                                <div class="text-[10px] text-slate-400 font-medium truncate">
                                     @if(str_contains(auth()->user()->email ?? '', 'supervisor'))
                                         Shift Supervisor
                                     @elseif(str_contains(auth()->user()->email ?? '', 'qc'))
@@ -248,9 +258,9 @@
                         </div>
 
                         <!-- Direct Visible Logout Button -->
-                        <a href="{{ route('logout') }}" title="Sign Out of ERP" class="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-lg border border-rose-200/80 transition duration-150 active:scale-95 no-underline ml-2">
+                        <a href="{{ route('logout') }}" title="Sign Out of ERP" class="flex items-center space-x-1 px-2.5 sm:px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-lg border border-rose-200/80 transition duration-150 active:scale-95 no-underline ml-1 sm:ml-2 flex-shrink-0">
                             <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-                            <span>Logout</span>
+                            <span class="hidden sm:inline">Logout</span>
                         </a>
 
                     </div>
@@ -349,6 +359,20 @@
                     `).join('');
                     if (typeof lucide !== 'undefined') lucide.createIcons();
                 });
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            if (!sidebar || !backdrop) return;
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                backdrop.classList.add('hidden');
+            }
         }
 
         function closeActivityHistoryModal() {
