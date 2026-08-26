@@ -21,6 +21,9 @@ class BundleValidationRulesTest extends TestCase
     {
         parent::setUp();
 
+        $user = \App\Models\User::factory()->create();
+        $this->actingAs($user);
+
         $this->buyer = Buyer::create(['buyer_name' => 'Test Buyer', 'status' => 'Active']);
         $this->style = Style::create(['buyer_id' => $this->buyer->id, 'style_no' => 'ST-TEST', 'status' => 'Active']);
         $this->line = SewingLine::create(['line_name' => 'L1', 'capacity' => 1000, 'status' => 'Active']);
