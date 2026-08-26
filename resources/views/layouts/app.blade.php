@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Bundle Management') | Pro ERP Manufacturing</title>
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -30,92 +31,123 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; }
         [x-cloak] { display: none !important; }
+        
+        /* Fallback robust styles for ERP Sidebar */
+        aside.erp-sidebar {
+            background-color: #0f172a !important;
+            color: #cbd5e1 !important;
+            width: 256px !important;
+            min-height: 100vh !important;
+        }
+        .sidebar-link {
+            display: flex !important;
+            align-items: center !important;
+            padding: 0.6rem 0.85rem !important;
+            font-size: 0.8rem !important;
+            font-weight: 500 !important;
+            border-radius: 0.5rem !important;
+            color: #94a3b8 !important;
+            text-decoration: none !important;
+            transition: all 0.15s ease !important;
+            margin-bottom: 0.25rem !important;
+        }
+        .sidebar-link:hover {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+        }
+        .sidebar-link.active {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+        }
     </style>
 </head>
-<body class="h-full text-slate-800 antialiased flex flex-col">
+<body class="h-full text-slate-800 antialiased flex flex-col bg-slate-100">
 
-    <div class="flex h-full w-full overflow-hidden bg-slate-100">
+    <div class="flex h-screen w-full overflow-hidden bg-slate-100">
 
         <!-- Sidebar (Left) -->
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800 transition-all duration-200">
+        <aside class="erp-sidebar flex flex-col flex-shrink-0 border-r border-slate-800 z-20">
             <!-- Brand header -->
-            <div class="h-16 px-5 flex items-center justify-between border-b border-slate-800">
-                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
+            <div class="h-16 px-5 flex items-center justify-between border-b border-slate-800 bg-slate-900">
+                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 text-white no-underline">
                     <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
                         <i data-lucide="layers" class="w-5 h-5"></i>
                     </div>
                     <div>
                         <div class="text-sm font-bold text-white tracking-wide">Pro ERP</div>
-                        <div class="text-[10px] uppercase tracking-wider text-slate-400">Manufacturing</div>
+                        <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Manufacturing</div>
                     </div>
                 </a>
             </div>
 
             <!-- New Order Action Button -->
-            <div class="px-4 py-4">
-                <a href="{{ route('bundles.create') }}" class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-black hover:bg-slate-800 text-white text-xs font-semibold rounded-lg border border-slate-700 shadow-sm transition">
+            <div class="px-4 py-4 bg-slate-900">
+                <a href="{{ route('bundles.create') }}" class="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-black hover:bg-slate-800 text-white text-xs font-semibold rounded-lg border border-slate-700 shadow-sm transition no-underline">
                     <i data-lucide="plus" class="w-4 h-4 text-blue-400"></i>
                     <span>New Production Order</span>
                 </a>
             </div>
 
             <!-- ERP Workflow Modules Navigation -->
-            <nav class="flex-1 px-3 space-y-1 overflow-y-auto">
-                <div class="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Modules</div>
+            <nav class="flex-1 px-3 py-2 space-y-1 overflow-y-auto bg-slate-900">
+                <div class="px-3 pt-1 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Production Workflow</div>
 
                 <!-- 1. Sourcing -->
-                <a href="{{ route('modules.sourcing') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.sourcing') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
-                    <i data-lucide="package" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.sourcing') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
+                <a href="{{ route('modules.sourcing') }}" class="sidebar-link {{ request()->routeIs('modules.sourcing') ? 'active' : '' }}">
+                    <i data-lucide="package" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.sourcing') ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>Sourcing</span>
                 </a>
 
                 <!-- 2. Cutting -->
-                <a href="{{ route('modules.cutting') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.cutting') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
-                    <i data-lucide="scissors" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.cutting') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
+                <a href="{{ route('modules.cutting') }}" class="sidebar-link {{ request()->routeIs('modules.cutting') ? 'active' : '' }}">
+                    <i data-lucide="scissors" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.cutting') ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>Cutting</span>
                 </a>
 
-                <!-- 3. Active Module: Sewing / Production Bundles -->
-                <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ (request()->routeIs('dashboard') || request()->routeIs('bundles.*')) ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
-                    <i data-lucide="shirt" class="w-4 h-4 mr-3 {{ (request()->routeIs('dashboard') || request()->routeIs('bundles.*')) ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
+                <!-- 3. Sewing / Bundles -->
+                <a href="{{ route('dashboard') }}" class="sidebar-link {{ (request()->routeIs('dashboard') || request()->routeIs('bundles.*')) ? 'active' : '' }}">
+                    <i data-lucide="shirt" class="w-4 h-4 mr-3 {{ (request()->routeIs('dashboard') || request()->routeIs('bundles.*')) ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>Sewing</span>
                 </a>
 
                 <!-- 4. QC -->
-                <a href="{{ route('modules.qc') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.qc') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
-                    <i data-lucide="check-square" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.qc') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
+                <a href="{{ route('modules.qc') }}" class="sidebar-link {{ request()->routeIs('modules.qc') ? 'active' : '' }}">
+                    <i data-lucide="check-square" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.qc') ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>QC</span>
                 </a>
 
                 <!-- 5. Shipping -->
-                <a href="{{ route('modules.shipping') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.shipping') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
-                    <i data-lucide="truck" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.shipping') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
+                <a href="{{ route('modules.shipping') }}" class="sidebar-link {{ request()->routeIs('modules.shipping') ? 'active' : '' }}">
+                    <i data-lucide="truck" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.shipping') ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>Shipping</span>
                 </a>
 
-                <div class="pt-4 px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Administration</div>
+                <div class="pt-4 px-3 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Master & Setup</div>
 
                 <!-- Master Data -->
-                <a href="{{ route('master.index') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('master.*') ? 'bg-slate-800 text-blue-400' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
-                    <i data-lucide="database" class="w-4 h-4 mr-3 text-slate-400 group-hover:text-white"></i>
+                <a href="{{ route('master.index') }}" class="sidebar-link {{ request()->routeIs('master.*') ? 'active' : '' }}">
+                    <i data-lucide="database" class="w-4 h-4 mr-3 {{ request()->routeIs('master.*') ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>Master Data</span>
                 </a>
             </nav>
 
-            <!-- Bottom Sidebar Footer -->
-            <div class="p-3 border-t border-slate-800 space-y-1">
+            <!-- Bottom Sidebar Footer (Settings & Support) -->
+            <div class="p-3 border-t border-slate-800 space-y-1 bg-slate-900 flex-shrink-0">
                 <!-- Settings -->
-                <a href="{{ route('modules.settings') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.settings') ? 'bg-slate-800 text-blue-400' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition">
-                    <i data-lucide="settings" class="w-4 h-4 mr-3"></i>
+                <a href="{{ route('modules.settings') }}" class="sidebar-link {{ request()->routeIs('modules.settings') ? 'active' : '' }}">
+                    <i data-lucide="settings" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.settings') ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>Settings</span>
                 </a>
                 <!-- Support -->
-                <a href="{{ route('modules.support') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.support') ? 'bg-slate-800 text-blue-400' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition">
-                    <i data-lucide="help-circle" class="w-4 h-4 mr-3"></i>
+                <a href="{{ route('modules.support') }}" class="sidebar-link {{ request()->routeIs('modules.support') ? 'active' : '' }}">
+                    <i data-lucide="help-circle" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.support') ? 'text-white' : 'text-slate-400' }}"></i>
                     <span>Support</span>
                 </a>
             </div>
@@ -222,7 +254,9 @@
     <script>
         // Initialize Lucide Icons
         document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
         });
 
         // Toast Helper
@@ -242,7 +276,9 @@
             `;
             
             container.appendChild(toast);
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
 
             setTimeout(() => {
                 toast.classList.remove('translate-y-2', 'opacity-0');
@@ -291,7 +327,9 @@
                             </div>
                         </div>
                     `).join('');
-                    lucide.createIcons();
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
                 })
                 .catch(() => {
                     list.innerHTML = `<div class="text-center py-6 text-rose-500 text-sm">Failed to load audit logs.</div>`;
