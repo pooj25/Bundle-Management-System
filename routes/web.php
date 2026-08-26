@@ -1,12 +1,19 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BundleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ErpModulesController;
 use App\Http\Controllers\MasterDataController;
 use Illuminate\Support\Facades\Route;
 
-// Redirect root to dashboard
+// Authentication Routes
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/login/quick/{role}', [AuthController::class, 'quickLogin'])->name('login.quick');
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Root redirect
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
