@@ -34,11 +34,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         [x-cloak] { display: none !important; }
-        .tab-active {
-            color: #1d4ed8;
-            border-bottom: 2px solid #1d4ed8;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body class="h-full text-slate-800 antialiased flex flex-col">
@@ -49,7 +44,7 @@
         <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800 transition-all duration-200">
             <!-- Brand header -->
             <div class="h-16 px-5 flex items-center justify-between border-b border-slate-800">
-                <div class="flex items-center space-x-3">
+                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
                     <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
                         <i data-lucide="layers" class="w-5 h-5"></i>
                     </div>
@@ -57,7 +52,7 @@
                         <div class="text-sm font-bold text-white tracking-wide">Pro ERP</div>
                         <div class="text-[10px] uppercase tracking-wider text-slate-400">Manufacturing</div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- New Order Action Button -->
@@ -72,34 +67,39 @@
             <nav class="flex-1 px-3 space-y-1 overflow-y-auto">
                 <div class="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Modules</div>
 
-                <a href="#" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition group">
-                    <i data-lucide="package" class="w-4 h-4 mr-3 text-slate-400 group-hover:text-white"></i>
+                <!-- 1. Sourcing -->
+                <a href="{{ route('modules.sourcing') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.sourcing') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
+                    <i data-lucide="package" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.sourcing') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
                     <span>Sourcing</span>
                 </a>
 
-                <a href="#" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition group">
-                    <i data-lucide="scissors" class="w-4 h-4 mr-3 text-slate-400 group-hover:text-white"></i>
+                <!-- 2. Cutting -->
+                <a href="{{ route('modules.cutting') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.cutting') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
+                    <i data-lucide="scissors" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.cutting') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
                     <span>Cutting</span>
                 </a>
 
-                <!-- Active Module: Sewing / Production Bundles -->
-                <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg bg-blue-600 text-white shadow-sm transition">
-                    <i data-lucide="shirt" class="w-4 h-4 mr-3 text-white"></i>
-                    <span>Sewing & Bundles</span>
+                <!-- 3. Active Module: Sewing / Production Bundles -->
+                <a href="{{ route('dashboard') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ (request()->routeIs('dashboard') || request()->routeIs('bundles.*')) ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
+                    <i data-lucide="shirt" class="w-4 h-4 mr-3 {{ (request()->routeIs('dashboard') || request()->routeIs('bundles.*')) ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
+                    <span>Sewing</span>
                 </a>
 
-                <a href="#" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition group">
-                    <i data-lucide="check-square" class="w-4 h-4 mr-3 text-slate-400 group-hover:text-white"></i>
-                    <span>QC & Inspection</span>
+                <!-- 4. QC -->
+                <a href="{{ route('modules.qc') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.qc') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
+                    <i data-lucide="check-square" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.qc') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
+                    <span>QC</span>
                 </a>
 
-                <a href="#" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition group">
-                    <i data-lucide="truck" class="w-4 h-4 mr-3 text-slate-400 group-hover:text-white"></i>
+                <!-- 5. Shipping -->
+                <a href="{{ route('modules.shipping') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.shipping') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
+                    <i data-lucide="truck" class="w-4 h-4 mr-3 {{ request()->routeIs('modules.shipping') ? 'text-white' : 'text-slate-400 group-hover:text-white' }}"></i>
                     <span>Shipping</span>
                 </a>
 
                 <div class="pt-4 px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Administration</div>
 
+                <!-- Master Data -->
                 <a href="{{ route('master.index') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('master.*') ? 'bg-slate-800 text-blue-400' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition group">
                     <i data-lucide="database" class="w-4 h-4 mr-3 text-slate-400 group-hover:text-white"></i>
                     <span>Master Data</span>
@@ -108,13 +108,15 @@
 
             <!-- Bottom Sidebar Footer -->
             <div class="p-3 border-t border-slate-800 space-y-1">
-                <a href="#" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                <!-- Settings -->
+                <a href="{{ route('modules.settings') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.settings') ? 'bg-slate-800 text-blue-400' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition">
                     <i data-lucide="settings" class="w-4 h-4 mr-3"></i>
                     <span>Settings</span>
                 </a>
-                <a href="#" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                <!-- Support -->
+                <a href="{{ route('modules.support') }}" class="flex items-center px-3 py-2 text-xs font-medium rounded-lg {{ request()->routeIs('modules.support') ? 'bg-slate-800 text-blue-400' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition">
                     <i data-lucide="help-circle" class="w-4 h-4 mr-3"></i>
-                    <span>Support & Docs</span>
+                    <span>Support</span>
                 </a>
             </div>
         </aside>
@@ -157,7 +159,7 @@
                     </div>
 
                     <!-- Notification Bell -->
-                    <button class="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg relative transition">
+                    <button onclick="showToast('You have 3 production alerts pending', 'info')" class="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg relative transition">
                         <i data-lucide="bell" class="w-5 h-5"></i>
                         <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-600 rounded-full ring-2 ring-white"></span>
                     </button>

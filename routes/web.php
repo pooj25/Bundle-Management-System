@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BundleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ErpModulesController;
 use App\Http\Controllers\MasterDataController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,11 @@ Route::get('/master-data/styles-by-buyer/{buyerId}', [MasterDataController::clas
 Route::post('/master-data/buyers', [MasterDataController::class, 'storeBuyer'])->name('master.buyers.store');
 Route::post('/master-data/styles', [MasterDataController::class, 'storeStyle'])->name('master.styles.store');
 Route::post('/master-data/lines', [MasterDataController::class, 'storeLine'])->name('master.lines.store');
+
+// All ERP Factory Modules
+Route::get('/sourcing', [ErpModulesController::class, 'sourcing'])->name('modules.sourcing');
+Route::get('/cutting', [ErpModulesController::class, 'cutting'])->name('modules.cutting');
+Route::get('/qc', [ErpModulesController::class, 'qc'])->name('modules.qc');
+Route::get('/shipping', [ErpModulesController::class, 'shipping'])->name('modules.shipping');
+Route::get('/settings', [ErpModulesController::class, 'settings'])->name('modules.settings');
+Route::get('/support', [ErpModulesController::class, 'support'])->name('modules.support');
