@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -24,7 +25,7 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
-            'password' => ['required'],
+            'password' => ['required', 'string'],
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
@@ -36,32 +37,38 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'These credentials do not match our records. Please check your email and password.',
         ])->onlyInput('email');
     }
 
-    public function quickLogin(string $role): RedirectResponse
+    public function showRegister(): View|RedirectResponse
     {
-        $user = match ($role) {
-            'supervisor' => User::updateOrCreate(
-                ['email' => 'supervisor@apparel-erp.com'],
-                ['name' => 'Sarah Smith', 'password' => Hash::make('password')]
-            ),
-            'qc' => User::updateOrCreate(
-                ['email' => 'qc@apparel-erp.com'],
-                ['name' => 'Robert Chen', 'password' => Hash::make('password')]
-            ),
-            default => User::updateOrCreate(
-                ['email' => 'admin@apparel-erp.com'],
-                ['name' => 'John Miller', 'password' => Hash::make('password')]
-            ),
-        };
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
 
-        Auth::login($user, true);
-        request()->session()->regenerate();
+        return view('auth.register');
+    }
+
+    public function register(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        $user = User::create([
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        Auth::login($user);
+        $request->session()->regenerate();
 
         return redirect()->route('dashboard')->with('toast', [
-            'message' => 'Logged in as ' . $user->name,
+            'message' => 'Account created successfully! Welcome, ' . $user->name,
             'type'    => 'success',
         ]);
     }

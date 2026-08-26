@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Route;
 // Authentication Routes (Public)
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::get('/login/quick/{role}', [AuthController::class, 'quickLogin'])->name('login.quick');
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Root redirect -> Go to Login if guest, Dashboard if logged in

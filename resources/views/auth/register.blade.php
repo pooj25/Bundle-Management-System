@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In | Pro ERP Apparel Manufacturing</title>
+    <title>Create Account | Pro ERP Apparel Manufacturing</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,17 +28,15 @@
                 <i data-lucide="layers" class="w-6 h-6"></i>
             </div>
             <h1 class="text-2xl font-black text-white tracking-tight">Pro ERP Manufacturing</h1>
-            <p class="text-xs text-slate-400 font-medium">Production Bundle Management & Real-Time Tracking</p>
+            <p class="text-xs text-slate-400 font-medium">Create your official user account</p>
         </div>
 
-        <!-- Login Form Card -->
+        <!-- Register Form Card -->
         <div class="bg-white rounded-2xl shadow-2xl p-8 border border-slate-200/80 space-y-6">
             
-            <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900">Sign in to your account</h2>
-                    <p class="text-xs text-slate-400">Enter your official credentials to access ERP</p>
-                </div>
+            <div class="border-b border-slate-100 pb-3">
+                <h2 class="text-base font-bold text-slate-900">Create New Account</h2>
+                <p class="text-xs text-slate-400">Enter your name and details to register</p>
             </div>
 
             <!-- Error Banner -->
@@ -49,62 +47,55 @@
                 </div>
             @endif
 
-            <!-- Session Status Alert -->
-            @if(session('toast'))
-                <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs text-blue-800 font-semibold flex items-center space-x-2">
-                    <i data-lucide="info" class="w-4 h-4 flex-shrink-0 text-blue-500"></i>
-                    <span>{{ session('toast.message') }}</span>
-                </div>
-            @endif
-
-            <!-- Real Login Form -->
-            <form action="{{ route('login.post') }}" method="POST" class="space-y-4 text-xs">
+            <!-- Registration Form -->
+            <form action="{{ route('register.post') }}" method="POST" class="space-y-4 text-xs">
                 @csrf
+
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1.5">Full Name *</label>
+                    <div class="relative">
+                        <i data-lucide="user" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
+                        <input type="text" name="name" value="{{ old('name') }}" required autofocus placeholder="e.g. Pooja / John Doe" class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition">
+                    </div>
+                </div>
 
                 <div>
                     <label class="block font-bold text-slate-700 uppercase mb-1.5">Email Address *</label>
                     <div class="relative">
                         <i data-lucide="mail" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
-                        <input type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="name@company.com" class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition">
+                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="your.name@company.com" class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition">
                     </div>
                 </div>
 
                 <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label class="block font-bold text-slate-700 uppercase">Password *</label>
-                    </div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1.5">Password *</label>
                     <div class="relative">
                         <i data-lucide="lock" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
-                        <input type="password" name="password" required placeholder="Enter password" class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition">
+                        <input type="password" name="password" required placeholder="Minimum 6 characters" class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition">
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-1">
-                    <label class="flex items-center space-x-2 cursor-pointer text-slate-600">
-                        <input type="checkbox" name="remember" class="w-3.5 h-3.5 text-blue-600 rounded">
-                        <span>Remember my login</span>
-                    </label>
+                <div>
+                    <label class="block font-bold text-slate-700 uppercase mb-1.5">Confirm Password *</label>
+                    <div class="relative">
+                        <i data-lucide="check" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 transform -translate-y-1/2"></i>
+                        <input type="password" name="password_confirmation" required placeholder="Re-type password" class="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition">
+                    </div>
                 </div>
 
                 <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-98 text-white font-bold rounded-xl shadow-md shadow-blue-500/20 transition duration-150 flex items-center justify-center space-x-2 text-xs">
-                    <span>Sign In to ERP</span>
+                    <span>Register & Access Dashboard</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </form>
 
-            <!-- Register / Create Account Link -->
             <div class="pt-4 border-t border-slate-100 text-center text-xs text-slate-500">
-                Don't have an account yet? 
-                <a href="{{ route('register') }}" class="font-bold text-blue-600 hover:text-blue-800 ml-1 no-underline">
-                    Create New Account &rarr;
+                Already have an account? 
+                <a href="{{ route('login') }}" class="font-bold text-blue-600 hover:text-blue-800 ml-1 no-underline">
+                    Sign In &rarr;
                 </a>
             </div>
 
-        </div>
-
-        <!-- System Footer -->
-        <div class="text-center text-slate-500 text-[11px]">
-            Pro ERP Apparel Manufacturing Node &bull; Secured with SHA-256 & Session Tokens
         </div>
 
     </div>
