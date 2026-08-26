@@ -1,0 +1,317 @@
+{
+    "info": {
+        "name": "Production Bundle Management System API",
+        "_postman_id": "bundle-mgmt-api-v1",
+        "description": "Comprehensive REST API documentation and endpoints for Apparel ERP Production Bundle Management System.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Dashboard",
+            "item": [
+                {
+                    "name": "Get Dashboard KPIs & Metrics",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/dashboard",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "dashboard"
+                            ]
+                        },
+                        "description": "Retrieves total bundles, quantities, completed/rejected breakdown, average efficiency %, today pulse, and recent activity feed."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Production Bundles",
+            "item": [
+                {
+                    "name": "List Bundles (Search, Filter, Sort, Pagination)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/bundles?page=1&per_page=20&buyer_id=1&sort_by=created_at&sort_dir=desc&search=",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bundles"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "20",
+                                    "description": "20, 50, 100"
+                                },
+                                {
+                                    "key": "buyer_id",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "style_id",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "line_id",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "date_from",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "date_to",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "search",
+                                    "value": ""
+                                },
+                                {
+                                    "key": "sort_by",
+                                    "value": "created_at",
+                                    "description": "bundle_no, buyer, style, quantity, efficiency, production_date"
+                                },
+                                {
+                                    "key": "sort_dir",
+                                    "value": "desc"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Production Bundle",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"bundle_no\": \"BN-POSTMAN-01\",\n    \"buyer_id\": 1,\n    \"style_id\": 1,\n    \"line_id\": 1,\n    \"color\": \"Navy\",\n    \"size\": \"M\",\n    \"quantity\": 500,\n    \"completed_qty\": 480,\n    \"rejected_qty\": 15,\n    \"operator_name\": \"John Miller\",\n    \"production_date\": \"2026-08-26\",\n    \"remarks\": \"Test production bundle via Postman API\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/bundles",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bundles"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Single Bundle Details",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/bundles/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bundles",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Production Bundle",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"bundle_no\": \"BN-1042\",\n    \"buyer_id\": 1,\n    \"style_id\": 1,\n    \"line_id\": 1,\n    \"color\": \"Navy\",\n    \"size\": \"M\",\n    \"quantity\": 500,\n    \"completed_qty\": 490,\n    \"rejected_qty\": 10,\n    \"operator_name\": \"John Miller\",\n    \"production_date\": \"2026-08-26\",\n    \"remarks\": \"Updated quantities and remarks\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/bundles/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bundles",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Soft Delete Bundle",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/bundles/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bundles",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Export Bundles (CSV / Excel Stream)",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/bundles-export",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "bundles-export"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Master Data",
+            "item": [
+                {
+                    "name": "Get All Active Buyers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/buyers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "buyers"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Active Styles (Filter by Buyer)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/styles?buyer_id=1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "styles"
+                            ],
+                            "query": [
+                                {
+                                    "key": "buyer_id",
+                                    "value": "1"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Sewing Lines",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/sewing-lines",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "sewing-lines"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000",
+            "type": "string"
+        }
+    ]
+}
