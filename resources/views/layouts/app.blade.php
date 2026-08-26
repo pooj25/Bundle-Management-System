@@ -223,43 +223,36 @@
                         <i data-lucide="history" class="w-4 h-4 hover:rotate-45 transition transform"></i>
                     </button>
 
-                    <!-- User Profile & Dropdown -->
-                    <div class="relative flex items-center space-x-3 pl-3 border-l border-slate-200" id="userProfileDropdownContainer">
-                        <button onclick="toggleUserDropdown()" class="flex items-center space-x-2.5 focus:outline-none group">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-900 to-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-white group-hover:scale-105 transition">
-                                {{ strtoupper(substr(auth()->user()->name ?? 'PE', 0, 2)) }}
+                    <!-- User Profile & Logout Section -->
+                    <div class="flex items-center space-x-3 pl-3 border-l border-slate-200">
+                        
+                        <!-- User Card -->
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-slate-900 to-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-white">
+                                {{ strtoupper(substr(auth()->user()->name ?? 'JM', 0, 2)) }}
                             </div>
-                            <div class="hidden lg:block text-left">
-                                <div class="text-xs font-bold text-slate-900 leading-tight">
+                            <div class="hidden sm:block text-left leading-tight">
+                                <div class="text-xs font-bold text-slate-900">
                                     {{ auth()->user()->name ?? 'John Miller' }}
                                 </div>
                                 <div class="text-[10px] text-slate-400 font-medium">
-                                    {{ auth()->check() ? 'Active Session' : 'Production Manager' }}
+                                    @if(str_contains(auth()->user()->email ?? '', 'supervisor'))
+                                        Shift Supervisor
+                                    @elseif(str_contains(auth()->user()->email ?? '', 'qc'))
+                                        QC Inspector
+                                    @else
+                                        Production Manager
+                                    @endif
                                 </div>
                             </div>
-                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 transition"></i>
-                        </button>
-
-                        <!-- Dropdown Menu -->
-                        <div id="userDropdownMenu" class="absolute right-0 top-12 w-48 bg-white rounded-xl shadow-xl border border-slate-200/80 py-1.5 hidden z-50 animate-slide-up text-xs font-medium text-slate-700">
-                            <div class="px-3.5 py-2 border-b border-slate-100">
-                                <div class="font-bold text-slate-900">{{ auth()->user()->name ?? 'John Miller' }}</div>
-                                <div class="text-[11px] text-slate-400">{{ auth()->user()->email ?? 'admin@apparel-erp.com' }}</div>
-                            </div>
-                            <a href="{{ route('modules.settings') }}" class="flex items-center px-3.5 py-2 hover:bg-slate-50 text-slate-700 no-underline">
-                                <i data-lucide="settings" class="w-4 h-4 mr-2.5 text-slate-400"></i>
-                                <span>Settings</span>
-                            </a>
-                            <a href="{{ route('login') }}" class="flex items-center px-3.5 py-2 hover:bg-slate-50 text-slate-700 no-underline">
-                                <i data-lucide="user" class="w-4 h-4 mr-2.5 text-slate-400"></i>
-                                <span>Switch User</span>
-                            </a>
-                            <div class="border-t border-slate-100 my-1"></div>
-                            <a href="{{ route('logout') }}" class="flex items-center px-3.5 py-2 hover:bg-rose-50 text-rose-600 no-underline font-semibold">
-                                <i data-lucide="log-out" class="w-4 h-4 mr-2.5 text-rose-500"></i>
-                                <span>Sign Out</span>
-                            </a>
                         </div>
+
+                        <!-- Direct Visible Logout Button -->
+                        <a href="{{ route('logout') }}" title="Sign Out of ERP" class="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold rounded-lg border border-rose-200/80 transition duration-150 active:scale-95 no-underline ml-2">
+                            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                            <span>Logout</span>
+                        </a>
+
                     </div>
                 </div>
 

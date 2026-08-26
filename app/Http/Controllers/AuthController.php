@@ -43,17 +43,17 @@ class AuthController extends Controller
     public function quickLogin(string $role): RedirectResponse
     {
         $user = match ($role) {
-            'supervisor' => User::firstOrCreate(
+            'supervisor' => User::updateOrCreate(
                 ['email' => 'supervisor@apparel-erp.com'],
-                ['name' => 'Sarah Smith (Supervisor)', 'password' => Hash::make('password')]
+                ['name' => 'Sarah Smith', 'password' => Hash::make('password')]
             ),
-            'qc' => User::firstOrCreate(
+            'qc' => User::updateOrCreate(
                 ['email' => 'qc@apparel-erp.com'],
-                ['name' => 'Robert Chen (QC Inspector)', 'password' => Hash::make('password')]
+                ['name' => 'Robert Chen', 'password' => Hash::make('password')]
             ),
-            default => User::firstOrCreate(
+            default => User::updateOrCreate(
                 ['email' => 'admin@apparel-erp.com'],
-                ['name' => 'John Miller (Production Manager)', 'password' => Hash::make('password')]
+                ['name' => 'John Miller', 'password' => Hash::make('password')]
             ),
         };
 
@@ -61,7 +61,7 @@ class AuthController extends Controller
         request()->session()->regenerate();
 
         return redirect()->route('dashboard')->with('toast', [
-            'message' => 'Logged in as ' . $user->name . ' (' . ($role === 'admin' ? 'Manager' : ucfirst($role)) . ')',
+            'message' => 'Logged in as ' . $user->name,
             'type'    => 'success',
         ]);
     }
