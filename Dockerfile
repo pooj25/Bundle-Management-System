@@ -36,6 +36,7 @@ RUN touch database/database.sqlite \
 ENV PORT=10000
 ENV DB_CONNECTION=sqlite
 ENV APP_ENV=production
+ENV APP_URL=https://bundle-management-system-1.onrender.com
 ENV APP_DEBUG=false
 ENV LOG_CHANNEL=stderr
 
