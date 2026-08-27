@@ -46,6 +46,7 @@
                             <th class="px-6 py-3.5">BUYER ID</th>
                             <th class="px-6 py-3.5">BUYER NAME</th>
                             <th class="px-6 py-3.5">CONTACT PERSON</th>
+                            <th class="px-6 py-3.5">CONTACT NUMBER</th>
                             <th class="px-6 py-3.5">EMAIL</th>
                             <th class="px-6 py-3.5">STATUS</th>
                             <th class="px-6 py-3.5 text-right">ACTIONS</th>
@@ -57,6 +58,7 @@
                                 <td class="px-6 py-3.5 font-bold text-slate-800 font-sans">B-{{ str_pad($buyer->id, 3, '0', STR_PAD_LEFT) }}</td>
                                 <td class="px-6 py-3.5 font-medium text-slate-900 font-mono">{{ $buyer->buyer_name }}</td>
                                 <td class="px-6 py-3.5 text-slate-700 font-mono">{{ $buyer->contact_person ?? 'John Doe' }}</td>
+                                <td class="px-6 py-3.5 text-slate-700 font-mono">{{ $buyer->contact_number ?? '-' }}</td>
                                 <td class="px-6 py-3.5 text-slate-600 font-mono">{{ $buyer->email ?? strtolower(str_replace(' ', '', $buyer->buyer_name)) . '@global.com' }}</td>
                                 <td class="px-6 py-3.5 font-sans">
                                     @if($buyer->status === 'Active')
@@ -66,7 +68,7 @@
                                     @endif
                                 </td>
                                 <td class="px-6 py-3.5 text-right font-sans">
-                                    <button onclick="showToast('Editing buyer {{ $buyer->buyer_name }}', 'info')" class="text-blue-600 hover:text-blue-800 text-xs font-semibold mr-2">Edit</button>
+                                    <button onclick="editBuyer({{ $buyer->id }}, '{{ addslashes($buyer->buyer_name) }}', '{{ addslashes($buyer->contact_person) }}', '{{ addslashes($buyer->contact_number) }}', '{{ addslashes($buyer->email) }}', '{{ $buyer->status }}')" class="text-blue-600 hover:text-blue-800 text-xs font-semibold mr-2">Edit</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -202,6 +204,10 @@
                 <input type="text" name="contact_person" placeholder="e.g. Jane Foster" class="w-full px-3 py-1.5 border rounded-lg">
             </div>
             <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Contact Number</label>
+                <input type="text" name="contact_number" placeholder="e.g. +1 234 567 890" class="w-full px-3 py-1.5 border rounded-lg">
+            </div>
+            <div>
                 <label class="block font-bold text-slate-700 uppercase mb-1">Email</label>
                 <input type="email" name="email" placeholder="e.g. jane@target.com" class="w-full px-3 py-1.5 border rounded-lg">
             </div>
@@ -209,6 +215,47 @@
             <div class="flex justify-end space-x-2 pt-3 border-t">
                 <button type="button" onclick="closeModal('newBuyerModal')" class="px-3.5 py-1.5 bg-slate-200 text-slate-700 font-semibold rounded-lg">Cancel</button>
                 <button type="submit" class="px-4 py-1.5 bg-slate-900 text-white font-bold rounded-lg">Save Buyer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Edit Buyer -->
+<div id="editBuyerModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden border border-slate-200">
+        <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+            <h3 class="text-xs font-bold text-slate-900 uppercase">Edit Buyer</h3>
+            <button onclick="closeModal('editBuyerModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <form onsubmit="submitEditBuyer(event)" class="p-5 space-y-3 text-xs" id="editBuyerForm">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="id" id="edit_buyer_id">
+            <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Buyer Name *</label>
+                <input type="text" name="buyer_name" id="edit_buyer_name" required class="w-full px-3 py-1.5 border rounded-lg">
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Contact Person</label>
+                <input type="text" name="contact_person" id="edit_contact_person" class="w-full px-3 py-1.5 border rounded-lg">
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Contact Number</label>
+                <input type="text" name="contact_number" id="edit_contact_number" class="w-full px-3 py-1.5 border rounded-lg">
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Email</label>
+                <input type="email" name="email" id="edit_email" class="w-full px-3 py-1.5 border rounded-lg">
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 uppercase mb-1">Status *</label>
+                <select name="status" id="edit_status" required class="w-full px-3 py-1.5 border rounded-lg">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="flex justify-end space-x-2 pt-3 border-t">
+                <button type="button" onclick="closeModal('editBuyerModal')" class="px-3.5 py-1.5 bg-slate-200 text-slate-700 font-semibold rounded-lg">Cancel</button>
+                <button type="submit" class="px-4 py-1.5 bg-slate-900 text-white font-bold rounded-lg">Update Buyer</button>
             </div>
         </form>
     </div>
@@ -297,6 +344,29 @@
         const data = Object.fromEntries(new FormData(e.target).entries());
         fetch("{{ route('master.buyers.store') }}", {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') },
+            body: JSON.stringify(data)
+        }).then(r => r.json()).then(res => {
+            if(res.success) { showToast(res.message); setTimeout(() => location.reload(), 700); }
+        });
+    }
+
+    function editBuyer(id, name, person, number, email, status) {
+        document.getElementById('edit_buyer_id').value = id;
+        document.getElementById('edit_buyer_name').value = name;
+        document.getElementById('edit_contact_person').value = person;
+        document.getElementById('edit_contact_number').value = number;
+        document.getElementById('edit_email').value = email;
+        document.getElementById('edit_status').value = status;
+        openModal('editBuyerModal');
+    }
+
+    function submitEditBuyer(e) {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        const id = data.id;
+        fetch(`/master-data/buyers/${id}`, {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') },
             body: JSON.stringify(data)
         }).then(r => r.json()).then(res => {

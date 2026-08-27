@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/master-data', [MasterDataController::class, 'index'])->name('master.index');
     Route::get('/master-data/styles-by-buyer/{buyerId}', [MasterDataController::class, 'getStylesByBuyer'])->name('master.styles-by-buyer');
     Route::post('/master-data/buyers', [MasterDataController::class, 'storeBuyer'])->name('master.buyers.store');
+    Route::put('/master-data/buyers/{id}', [MasterDataController::class, 'updateBuyer'])->name('master.buyers.update');
     Route::post('/master-data/styles', [MasterDataController::class, 'storeStyle'])->name('master.styles.store');
     Route::post('/master-data/lines', [MasterDataController::class, 'storeLine'])->name('master.lines.store');
 

@@ -38,6 +38,7 @@ class MasterDataController extends Controller
         $validated = $request->validate([
             'buyer_name'     => 'required|string|max:255|unique:buyers,buyer_name',
             'contact_person' => 'nullable|string|max:255',
+            'contact_number' => 'nullable|string|max:50',
             'email'          => 'nullable|email|max:255',
             'status'         => 'required|in:Active,Inactive',
         ]);
@@ -49,6 +50,26 @@ class MasterDataController extends Controller
             'message' => 'Buyer created successfully!',
             'data'    => $buyer,
         ], 201);
+    }
+
+    public function updateBuyer(Request $request, int $id): JsonResponse
+    {
+        $buyer = Buyer::findOrFail($id);
+        $validated = $request->validate([
+            'buyer_name'     => 'required|string|max:255|unique:buyers,buyer_name,' . $id,
+            'contact_person' => 'nullable|string|max:255',
+            'contact_number' => 'nullable|string|max:50',
+            'email'          => 'nullable|email|max:255',
+            'status'         => 'required|in:Active,Inactive',
+        ]);
+
+        $buyer->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Buyer updated successfully!',
+            'data'    => $buyer,
+        ]);
     }
 
     public function storeStyle(Request $request): JsonResponse
