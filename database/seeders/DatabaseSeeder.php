@@ -6,14 +6,25 @@ use App\Models\Buyer;
 use App\Models\ProductionBundle;
 use App\Models\SewingLine;
 use App\Models\Style;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // 0. Seed Default Admin User
+        if (User::count() === 0) {
+            User::create([
+                'name' => 'Pooja',
+                'email' => 'pooja@example.com',
+                'password' => Hash::make('password'),
+            ]);
+        }
+
         // 1. Seed Buyers
         $buyersData = [
             ['buyer_name' => 'Global Retail', 'contact_person' => 'John Doe', 'email' => 'john@global.com', 'status' => 'Active'],
